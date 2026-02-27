@@ -7,9 +7,9 @@ import {
 import { TournamentsDashboard } from "@/components/TournamentsDashboard";
 
 export const metadata: Metadata = {
-  title: "Tournois Winamax – Programme complet du jour",
+  title: "Tournois Winamax Aujourd'hui – Freerolls, Knockout & Buy-ins",
   description:
-    "Programme complet des tournois Winamax : freerolls, knockouts, satellites, hyper-turbos. Filtrez par buy-in et format. Mis à jour chaque nuit.",
+    "Programme complet des tournois Winamax du jour : freerolls gratuits, bounty knockouts, satellites et séries. Filtrez par buy-in et format. Mis à jour chaque nuit à 2h.",
 };
 
 export default function WinmaxPage() {

@@ -1,9 +1,64 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Meilleurs Bonus Poker en Ligne 2026 – Winamax, PokerStars, Unibet",
+  title: "Meilleurs Bonus Poker 2026 – Winamax 500€, PokerStars 600€",
   description:
-    "Comparatif des meilleurs bonus de poker en ligne en France : Winamax 500€, PokerStars 600€, Unibet 200€. Conditions détaillées, conseils et avis experts.",
+    "Comparatif des meilleurs bonus poker en ligne France 2026 : Winamax 500€, PokerStars 600€, Unibet 200€. Conditions détaillées, avis et conseils pour débutants.",
+};
+
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Quel est le meilleur bonus poker en ligne en France en 2026 ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Le meilleur bonus poker en France en 2026 est proposé par Winamax avec jusqu'à 500€ offerts sur le premier dépôt. Winamax est le leader du marché français, avec une interface en français et de nombreux freerolls. PokerStars offre jusqu'à 600€ mais avec des conditions de déblocage plus complexes.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Comment fonctionne le déblocage d'un bonus poker ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Le bonus poker est débloqué progressivement en jouant des parties réelles. Chaque tranche jouée libère une partie du bonus sur votre compte. Sur Winamax, le bonus se débloque par paliers selon votre activité sur 90 jours. Sur PokerStars, il se débloque via les Stellar Rewards Points gagnés en jouant.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Peut-on cumuler les bonus de plusieurs sites de poker ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui, vous pouvez ouvrir un compte sur plusieurs sites légaux français (Winamax, PokerStars, Unibet) et bénéficier du bonus de bienvenue sur chacun. Les comptes sont indépendants. Cela vous permet de cumuler jusqu'à 1 300€ de bonus au total.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Quel site de poker choisir pour débuter ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Pour débuter, Winamax est recommandé : c'est le leader français, l'interface est en français, les tables sont nombreuses à tous les niveaux, et les freerolls permettent de s'entraîner sans risque. Le dépôt minimum est de 50€ pour obtenir le bonus.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Les sites de poker en ligne sont-ils légaux en France ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Oui, Winamax, PokerStars France et Unibet sont tous agréés par l'Autorité Nationale des Jeux (ANJ) et opèrent légalement en France. Le poker en ligne est autorisé pour les joueurs majeurs (+18 ans) sur ces plateformes réglementées.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Qu'est-ce qu'un freeroll poker ?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Un freeroll est un tournoi de poker gratuit (sans buy-in) qui offre de vrais prix : argent réel ou tickets de tournoi. Winamax et PokerStars proposent de nombreux freerolls quotidiens, dont certains réservés aux nouveaux inscrits.",
+      },
+    },
+  ],
 };
 
 interface BonusOffer {
@@ -151,6 +206,11 @@ function StarRating({ rating, max = 5 }: { rating: number; max?: number }) {
 
 export default function BonusPokerPage() {
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }}
+    />
     <div className="mx-auto max-w-4xl px-4 py-8">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-slate-500">
@@ -356,5 +416,6 @@ export default function BonusPokerPage() {
         </a>
       </div>
     </div>
+    </>
   );
 }

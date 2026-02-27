@@ -7,9 +7,9 @@ import {
 import { TournamentsDashboard } from "@/components/TournamentsDashboard";
 
 export const metadata: Metadata = {
-  title: "Tournois Poker Dimanche – Sunday Million, Warm-Up, Winamax Series",
+  title: "Tournois Poker Dimanche – Sunday Million 1M$, Sunday Warm-Up",
   description:
-    "Programme complet des grands tournois poker du dimanche : Sunday Million, Sunday Warm-Up, tournois Winamax. Les plus grandes garanties de la semaine.",
+    "Programme des grands tournois poker du dimanche : Sunday Million 1M$ garanti, Sunday Warm-Up 500K$, Winamax Series. Les plus grosses garanties de la semaine en France.",
 };
 
 /** Returns the next Sunday date (YYYY-MM-DD) at or after a given date */

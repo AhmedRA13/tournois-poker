@@ -7,9 +7,9 @@ import {
 import { TournamentsDashboard } from "@/components/TournamentsDashboard";
 
 export const metadata: Metadata = {
-  title: "Tournois PokerStars – Programme complet du jour",
+  title: "Tournois PokerStars France – Sunday Million, Garanties & Satellites",
   description:
-    "Programme complet des tournois PokerStars France : Sunday Million, Warm-Up, freerolls, satellites. Filtrez par buy-in et garantie. Mis à jour chaque nuit.",
+    "Programme complet des tournois PokerStars France : Sunday Million 1M$, Warm-Up, freerolls, satellites EPT. Filtrez par buy-in et garantie. Mis à jour chaque nuit.",
 };
 
 export default function PokerStarsPage() {

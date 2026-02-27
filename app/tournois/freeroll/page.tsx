@@ -7,9 +7,9 @@ import {
 import { TournamentsDashboard } from "@/components/TournamentsDashboard";
 
 export const metadata: Metadata = {
-  title: "Freerolls Poker – Tournois gratuits Winamax et PokerStars",
+  title: "Freerolls Poker Gratuits – Winamax & PokerStars Sans Buy-in",
   description:
-    "Tous les freerolls poker gratuits du moment : Winamax et PokerStars. Jouez sans buy-in et remportez des vrais prix. Programme mis à jour chaque nuit.",
+    "Programme complet des freerolls poker gratuits en France : Winamax et PokerStars. Jouez sans buy-in et gagnez de l'argent réel. Mis à jour chaque nuit.",
 };
 
 export default function FreerollPage() {

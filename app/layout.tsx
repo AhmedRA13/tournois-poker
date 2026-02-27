@@ -19,20 +19,43 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
-        <header className="border-b border-slate-800 bg-slate-900">
+        <header className="border-b border-slate-800 bg-slate-900 sticky top-0 z-50">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-            <a href="/" className="flex items-center gap-2 font-bold text-white">
-              <span className="text-2xl">♠</span>
-              <span className="text-lg">tournois-poker.fr</span>
+            <a href="/" className="flex items-center gap-2 font-bold text-white shrink-0">
+              <span className="text-xl">♠</span>
+              <span className="text-base">tournois-poker.fr</span>
             </a>
-            <nav className="hidden gap-6 text-sm font-medium text-slate-300 md:flex">
-              <a href="/tournois/winamax/" className="hover:text-white">Winamax</a>
-              <a href="/tournois/pokerstars/" className="hover:text-white">PokerStars</a>
-              <a href="/tournois/unibet/" className="hover:text-white">Unibet</a>
-              <a href="/tournois/freeroll/" className="hover:text-white">Freerolls</a>
-              <a href="/news/" className="hover:text-white">News</a>
-              <a href="/guide/bonus-poker/" className="hover:text-white">Bonus</a>
+            {/* Desktop nav */}
+            <nav className="hidden gap-5 text-sm font-medium text-slate-300 md:flex">
+              <a href="/tournois/winamax/" className="hover:text-white transition-colors">Winamax</a>
+              <a href="/tournois/pokerstars/" className="hover:text-white transition-colors">PokerStars</a>
+              <a href="/tournois/unibet/" className="hover:text-white transition-colors">Unibet</a>
+              <a href="/tournois/freeroll/" className="hover:text-white transition-colors">Freerolls</a>
+              <a href="/news/" className="hover:text-white transition-colors">News</a>
+              <a href="/guide/bonus-poker/" className="hover:text-white transition-colors">Bonus</a>
             </nav>
+          </div>
+          {/* Mobile nav — horizontal scroll */}
+          <div className="md:hidden border-t border-slate-800/60 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex min-w-max">
+              {[
+                { href: "/", label: "Accueil" },
+                { href: "/tournois/winamax/", label: "♠ Winamax" },
+                { href: "/tournois/pokerstars/", label: "★ PokerStars" },
+                { href: "/tournois/freeroll/", label: "🎁 Freerolls" },
+                { href: "/tournois/dimanche/", label: "🏆 Dimanche" },
+                { href: "/news/", label: "📰 News" },
+                { href: "/guide/bonus-poker/", label: "💰 Bonus" },
+              ].map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="px-4 py-2.5 text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition-colors whitespace-nowrap"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
         </header>
         <main>{children}</main>
