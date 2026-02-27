@@ -1,0 +1,30 @@
+{
+  "name": "tournois-poker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fetch:winamax": "node scripts/fetch_winamax.mjs",
+    "fetch:all": "node scripts/fetch_winamax.mjs && node scripts/fetch_pokerstars.mjs && node scripts/fetch_unibet.mjs",
+    "generate:news": "node scripts/generate_news.mjs"
+  },
+  "dependencies": {
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5",
+    "tailwindcss": "^4",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4"
+  }
+}
