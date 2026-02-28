@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { JsonLd } from "@/lib/seo";
+import { EmailCapturePopup } from "@/components/EmailCapturePopup";
 
 export const metadata: Metadata = {
   title: {
@@ -91,6 +92,7 @@ export default function RootLayout({
             </div>
           </div>
         </header>
+        <EmailCapturePopup />
         <main>{children}</main>
         <footer className="mt-16 border-t border-slate-800 bg-slate-900 py-8 text-center text-xs text-slate-500">
           <p>
