@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "@/lib/news";
 import { getAllGuides, ALL_GUIDE_SLUGS } from "@/lib/guides";
+import { DEBUTANT_SLUGS } from "@/lib/debutant";
 
 export const dynamic = "force-static";
 
@@ -95,5 +96,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  return [...staticRoutes, ...newsRoutes, ...guideRoutes];
+  const debutantIndexRoute: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/guide/debutant/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+  ];
+
+  const debutantRoutes: MetadataRoute.Sitemap = [...DEBUTANT_SLUGS].map((slug) => ({
+    url: `${BASE_URL}/guide/debutant/${slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  return [...staticRoutes, ...newsRoutes, ...guideRoutes, ...debutantIndexRoute, ...debutantRoutes];
 }
