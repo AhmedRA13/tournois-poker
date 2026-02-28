@@ -266,18 +266,19 @@ export function TournamentsDashboard({
     return dates.filter((d) => d >= minStr && d <= maxStr);
   }, [dates, today]);
 
-  // À la une: upcoming specials (buyin >= 5€) in next 48h
+  // À la une: upcoming specials (buyin >= 5€) in next 48h — respects platform filter
   const alune = useMemo(() => {
     const now = new Date();
     const in48h = new Date(now.getTime() + 48 * 3600 * 1000);
     return tournaments
       .filter((t) => t.special && t.buyin >= 5)
+      .filter((t) => platformFilter === "all" || t.platform === platformFilter)
       .filter((t) => {
         const dt = new Date(`${t.date}T${t.time}:00+01:00`);
         return dt >= now && dt <= in48h;
       })
       .slice(0, 6);
-  }, [tournaments]);
+  }, [tournaments, platformFilter]);
 
   // Whether "is today" logic applies
   const isToday = selectedDate === today;
