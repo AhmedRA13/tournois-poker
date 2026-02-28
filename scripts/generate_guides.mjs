@@ -87,27 +87,39 @@ Génère un guide complet en FRANÇAIS pour le sujet : "${guide.title}" (catégo
 
 Le guide doit faire environ ${guide.readTime * 150} mots de contenu utile.
 
-Format de réponse : JSON uniquement, avec cette structure exacte :
-{
-  "description": "Meta description SEO (150-160 caractères, accrocheur)",
-  "content": "Contenu HTML complet (h2, h3, p, ul, ol, table si pertinent — PAS de h1)",
-  "faq": [
-    {"q": "Question 1 ?", "a": "Réponse concise en 2-3 phrases."},
-    {"q": "Question 2 ?", "a": "Réponse concise."},
-    {"q": "Question 3 ?", "a": "Réponse concise."},
-    {"q": "Question 4 ?", "a": "Réponse concise."},
-    {"q": "Question 5 ?", "a": "Réponse concise."}
-  ]
-}
+Réponds EXACTEMENT dans ce format avec ces séparateurs (ne change pas les séparateurs) :
+
+===DESCRIPTION===
+[Meta description SEO de 150-160 caractères, accrocheur]
+===CONTENT===
+[Contenu HTML : utilise <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em> uniquement. PAS de h1. PAS d'attributs HTML avec des guillemets. PAS de liens <a>.]
+===FAQ_Q1===
+[Question 1]
+===FAQ_A1===
+[Réponse concise (2-3 phrases)]
+===FAQ_Q2===
+[Question 2]
+===FAQ_A2===
+[Réponse]
+===FAQ_Q3===
+[Question 3]
+===FAQ_A3===
+[Réponse]
+===FAQ_Q4===
+[Question 4]
+===FAQ_A4===
+[Réponse]
+===FAQ_Q5===
+[Question 5]
+===FAQ_A5===
+[Réponse]
+===END===
 
 Consignes :
 - Écriture claire, pédagogique, adaptée au niveau indiqué par la catégorie
 - Exemples concrets avec des chiffres (tailles de mise, SPR, etc.) quand pertinent
 - Mentionner les plateformes françaises Winamax et PokerStars quand applicable
-- Ne PAS inventer de statistiques non vérifiables
-- HTML propre : seulement <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. Pas de style inline, pas de script.
-- IMPORTANT : toutes les chaînes JSON doivent être sur une seule ligne (pas de \\n dans les valeurs — utilise des balises HTML pour les sauts de ligne)
-- Réponds UNIQUEMENT avec le JSON valide, sans commentaire avant/après`;
+- Ne PAS inventer de statistiques non vérifiables`;
 
   const message = await client.messages.create({
     model: "claude-haiku-4-5-20251001",
@@ -116,31 +128,32 @@ Consignes :
   });
 
   const rawText = message.content[0].text.trim();
-  // Strip markdown code blocks if present
-  let jsonText = rawText.replace(/^```json?\s*/i, "").replace(/```\s*$/, "").trim();
 
-  // Attempt to parse; if unterminated, try to close the JSON gracefully
-  let data;
-  try {
-    data = JSON.parse(jsonText);
-  } catch (e) {
-    // If the JSON was truncated, attempt to salvage by closing open structures
-    // Find the last complete FAQ entry and truncate there
-    const lastFaqClose = jsonText.lastIndexOf('"}');
-    if (lastFaqClose > 0) {
-      let fixed = jsonText.slice(0, lastFaqClose + 2);
-      // Close the faq array and root object
-      if (!fixed.trimEnd().endsWith("]")) fixed += "]";
-      if (!fixed.trimEnd().endsWith("}")) fixed += "}";
-      try {
-        data = JSON.parse(fixed);
-      } catch {
-        throw new Error(`JSON parse failed: ${e.message}`);
-      }
-    } else {
-      throw new Error(`JSON parse failed: ${e.message}`);
-    }
+  // Parse the text-delimited format
+  function extractSection(text, startTag, endTag) {
+    const start = text.indexOf(startTag);
+    if (start === -1) return "";
+    const contentStart = start + startTag.length;
+    const end = endTag ? text.indexOf(endTag, contentStart) : text.length;
+    return (end === -1 ? text.slice(contentStart) : text.slice(contentStart, end)).trim();
   }
+
+  const description = extractSection(rawText, "===DESCRIPTION===", "===CONTENT===");
+  const content = extractSection(rawText, "===CONTENT===", "===FAQ_Q1===");
+
+  const faq = [];
+  for (let i = 1; i <= 5; i++) {
+    const q = extractSection(rawText, `===FAQ_Q${i}===`, `===FAQ_A${i}===`);
+    const nextTag = i < 5 ? `===FAQ_Q${i + 1}===` : "===END===";
+    const a = extractSection(rawText, `===FAQ_A${i}===`, nextTag);
+    if (q && a) faq.push({ q, a });
+  }
+
+  if (!description || !content) {
+    throw new Error("Failed to extract description or content from response");
+  }
+
+  const data = { description, content, faq };
 
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
 
