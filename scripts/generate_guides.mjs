@@ -105,19 +105,42 @@ Consignes :
 - Exemples concrets avec des chiffres (tailles de mise, SPR, etc.) quand pertinent
 - Mentionner les plateformes françaises Winamax et PokerStars quand applicable
 - Ne PAS inventer de statistiques non vérifiables
-- HTML propre, sans style inline, sans script
-- Réponds UNIQUEMENT avec le JSON, sans commentaire avant/après`;
+- HTML propre : seulement <h2>, <h3>, <p>, <ul>, <li>, <ol>, <strong>, <em>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. Pas de style inline, pas de script.
+- IMPORTANT : toutes les chaînes JSON doivent être sur une seule ligne (pas de \\n dans les valeurs — utilise des balises HTML pour les sauts de ligne)
+- Réponds UNIQUEMENT avec le JSON valide, sans commentaire avant/après`;
 
   const message = await client.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 4000,
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 8000,
     messages: [{ role: "user", content: prompt }],
   });
 
   const rawText = message.content[0].text.trim();
   // Strip markdown code blocks if present
-  const jsonText = rawText.replace(/^```json?\s*/i, "").replace(/```\s*$/, "").trim();
-  const data = JSON.parse(jsonText);
+  let jsonText = rawText.replace(/^```json?\s*/i, "").replace(/```\s*$/, "").trim();
+
+  // Attempt to parse; if unterminated, try to close the JSON gracefully
+  let data;
+  try {
+    data = JSON.parse(jsonText);
+  } catch (e) {
+    // If the JSON was truncated, attempt to salvage by closing open structures
+    // Find the last complete FAQ entry and truncate there
+    const lastFaqClose = jsonText.lastIndexOf('"}');
+    if (lastFaqClose > 0) {
+      let fixed = jsonText.slice(0, lastFaqClose + 2);
+      // Close the faq array and root object
+      if (!fixed.trimEnd().endsWith("]")) fixed += "]";
+      if (!fixed.trimEnd().endsWith("}")) fixed += "}";
+      try {
+        data = JSON.parse(fixed);
+      } catch {
+        throw new Error(`JSON parse failed: ${e.message}`);
+      }
+    } else {
+      throw new Error(`JSON parse failed: ${e.message}`);
+    }
+  }
 
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
 
