@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "@/lib/news";
+import { getAllGuides, ALL_GUIDE_SLUGS } from "@/lib/guides";
 
 export const dynamic = "force-static";
 
@@ -7,6 +8,10 @@ const BASE_URL = "https://tournois-poker.fr";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const articles = getAllArticles();
+  const generatedGuides = getAllGuides();
+  const generatedSlugs = new Set(generatedGuides.map((g) => g.slug));
+  // Include all planned guide slugs in sitemap
+  const guideSlugs = ALL_GUIDE_SLUGS;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     {
@@ -57,6 +62,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: `${BASE_URL}/guide/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
   ];
 
   const newsRoutes: MetadataRoute.Sitemap = articles.map((a) => ({
@@ -66,5 +77,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...newsRoutes];
+  const guideRoutes: MetadataRoute.Sitemap = guideSlugs.map((slug) => {
+    const guide = generatedSlugs.has(slug)
+      ? generatedGuides.find((g) => g.slug === slug)
+      : null;
+    return {
+      url: `${BASE_URL}/guide/${slug}/`,
+      lastModified: guide ? new Date(guide.updatedAt) : new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    };
+  });
+
+  return [...staticRoutes, ...newsRoutes, ...guideRoutes];
 }

@@ -9,6 +9,21 @@ export const metadata: Metadata = {
   description:
     "Programme complet des tournois de poker en ligne en France. Winamax, PokerStars, Unibet — filtrez par buy-in, garantie, format.",
   metadataBase: new URL("https://tournois-poker.fr"),
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    siteName: "Tournois Poker",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: "Tournois Poker – Programme Winamax, PokerStars, Unibet",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +37,8 @@ export default function RootLayout({
         <header className="border-b border-slate-800 bg-slate-900 sticky top-0 z-50">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
             <a href="/" className="flex items-center gap-2 font-bold text-white shrink-0">
-              <span className="text-xl">♠</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="" className="h-7 w-7 rounded-md object-cover" />
               <span className="text-base">tournois-poker.fr</span>
             </a>
             {/* Desktop nav */}
@@ -32,6 +48,7 @@ export default function RootLayout({
               <a href="/tournois/unibet/" className="hover:text-white transition-colors">Unibet</a>
               <a href="/tournois/freeroll/" className="hover:text-white transition-colors">Freerolls</a>
               <a href="/news/" className="hover:text-white transition-colors">News</a>
+              <a href="/guide/" className="hover:text-white transition-colors">Guides</a>
               <a href="/guide/bonus-poker/" className="hover:text-white transition-colors">Bonus</a>
             </nav>
           </div>
@@ -45,6 +62,7 @@ export default function RootLayout({
                 { href: "/tournois/freeroll/", label: "🎁 Freerolls" },
                 { href: "/tournois/dimanche/", label: "🏆 Dimanche" },
                 { href: "/news/", label: "📰 News" },
+                { href: "/guide/", label: "📚 Guides" },
                 { href: "/guide/bonus-poker/", label: "💰 Bonus" },
               ].map((link) => (
                 <a

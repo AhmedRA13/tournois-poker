@@ -68,13 +68,16 @@ function detectFormat(name, buyinEuros) {
 }
 
 /**
- * Is this a special / highlighted tournament? (Winamax Series, big guarantees, named events)
- * Heuristic: ALL_CAPS name (like ANDROMEDA, CENTAURUS, PEGASUS…) or contains "Series".
+ * Is this a special / highlighted tournament?
+ * A tournament is special if: buy-in >= 5€ AND belongs to a named series or major event.
+ * Daily recurring events (freerolls, generic daily/weekly) are excluded.
  */
-function isSpecial(name) {
-  // Fully uppercase word of 4+ chars = Winamax named tournament
+function isSpecial(name, buyinEuros) {
+  if (buyinEuros < 5) return false;
+  // Winamax named series (ALL CAPS 4+ chars = SISMIX, SMASK, ANDROMEDA, CENTAURUS…)
   if (/\b[A-Z]{4,}\b/.test(name)) return true;
-  if (/series|million|festival|open|championship/i.test(name)) return true;
+  // Named series keywords
+  if (/\b(sismix|smask|series|million|festival|championship|grand[\s\-]prix|bounty[\s\-]builder|deep[\s\-]stack|super[\s\-]sunday)\b/i.test(name)) return true;
   return false;
 }
 
@@ -117,7 +120,7 @@ async function main() {
         buyinRaw: t.buyin,  // original string e.g. "50€"
         buyin: buyinEuros,  // float in euros
         format: detectFormat(t.name, buyinEuros),
-        special: isSpecial(t.name),
+        special: isSpecial(t.name, buyinEuros),
         url: `https://www.winamax.fr/poker/tournament.php?ID=${t.id}`,
       });
     }

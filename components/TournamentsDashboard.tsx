@@ -22,7 +22,7 @@ const FORMAT_COLORS: Record<TFormat, string> = {
   freeroll: "bg-green-900/60 text-green-300 ring-green-700/50",
   knockout: "bg-red-900/60 text-red-300 ring-red-700/50",
   satellite: "bg-blue-900/60 text-blue-300 ring-blue-700/50",
-  turbo: "bg-yellow-900/60 text-yellow-900/60 ring-yellow-700/50",
+  turbo: "bg-yellow-900/60 text-yellow-200 ring-yellow-700/50",
   hyper: "bg-orange-900/60 text-orange-300 ring-orange-700/50",
   standard: "bg-slate-800 text-slate-300 ring-slate-600/50",
 };
@@ -34,9 +34,9 @@ const PLATFORM_COLORS: Record<TPlatform, string> = {
 };
 
 const PLATFORM_LOGOS: Record<TPlatform, string> = {
-  winamax: "W",
-  pokerstars: "★",
-  unibet: "U",
+  winamax: "WMX",
+  pokerstars: "PS",
+  unibet: "UNI",
 };
 
 const PLATFORM_LABELS: Record<TPlatform, string> = {
@@ -119,7 +119,7 @@ function TournamentRow({ t }: { t: UnifiedTournament }) {
       <td className="px-3 py-3 min-w-0">
         <div className="flex items-center gap-1.5 min-w-0">
           <span
-            className={`shrink-0 text-xs font-bold ${PLATFORM_COLORS[t.platform]}`}
+            className={`shrink-0 text-[10px] font-bold tracking-tight ${PLATFORM_COLORS[t.platform]}`}
             title={PLATFORM_LABELS[t.platform]}
           >
             {PLATFORM_LOGOS[t.platform]}
@@ -266,12 +266,12 @@ export function TournamentsDashboard({
     return dates.filter((d) => d >= minStr && d <= maxStr);
   }, [dates, today]);
 
-  // À la une: upcoming specials in next 48h
+  // À la une: upcoming specials (buyin >= 5€) in next 48h
   const alune = useMemo(() => {
     const now = new Date();
     const in48h = new Date(now.getTime() + 48 * 3600 * 1000);
     return tournaments
-      .filter((t) => t.special)
+      .filter((t) => t.special && t.buyin >= 5)
       .filter((t) => {
         const dt = new Date(`${t.date}T${t.time}:00+01:00`);
         return dt >= now && dt <= in48h;

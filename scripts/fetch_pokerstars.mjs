@@ -75,17 +75,23 @@ function detectFormat(name, structureInt) {
   return "standard";
 }
 
-/** Is it a special/featured tournament? */
-function isSpecial(raw, guaranteeText) {
-  const n = raw.toLowerCase();
-  if (n.includes("-x-tourn-championship") || n.includes("-x-tourn-special")) return true;
-  // Large guarantee > $10k
+/**
+ * Is it a special/featured tournament?
+ * Requires buy-in >= 5€ AND either a named series or large guarantee (>= 25K€).
+ */
+function isSpecial(raw, guaranteeText, buyinEuros) {
+  if (buyinEuros < 5) return false;
+  // Named PokerStars series / flagship events
+  if (/sunday million|sunday warm.?up|sunday special|sunday storm|sunday grand prix/i.test(raw)) return true;
+  if (/\bscoop\b|\bwcoop\b|\btcoop\b|\becoop\b|\bseries\b/i.test(raw)) return true;
+  if (/power path|battle royale|bounty builder|the big game/i.test(raw)) return true;
+  // Large guarantee >= 25K€
   if (guaranteeText) {
     const match = guaranteeText.match(/([\d,]+)\s*([KMB])/i);
     if (match) {
       const val = parseFloat(match[1].replace(",", ""));
-      const mult = match[2].toUpperCase() === "K" ? 1000 : match[2].toUpperCase() === "M" ? 1000000 : 1000000000;
-      if (val * mult >= 10000) return true;
+      const mult = match[2].toUpperCase() === "K" ? 1000 : match[2].toUpperCase() === "M" ? 1_000_000 : 1_000_000_000;
+      if (val * mult >= 25000) return true;
     }
   }
   return false;
@@ -168,7 +174,7 @@ async function fetchTournaments() {
         guarantee: guaranteeEuros,
         guaranteeText,
         format: detectFormat(cleanName, t.structureInt),
-        special: isSpecial(t.name, guaranteeText),
+        special: isSpecial(t.name, guaranteeText, buyinEuros),
         gameInt: t.gameInt,
         maxPlayers: t.maxPlayers,
         url: "https://www.pokerstars.fr/poker/play-poker/tournaments/",

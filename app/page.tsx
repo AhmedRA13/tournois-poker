@@ -5,6 +5,7 @@ import {
   getParisTodayDate,
 } from "@/lib/tournaments";
 import { TournamentsDashboard } from "@/components/TournamentsDashboard";
+import { getAllArticles } from "@/lib/news";
 
 export const metadata: Metadata = {
   title: {
@@ -28,6 +29,7 @@ export default function HomePage() {
   const tournaments = getUnifiedTournaments();
   const dates = getAvailableDates(tournaments);
   const today = getParisTodayDate();
+  const latestNews = getAllArticles().slice(0, 5);
 
   const todayTourneys = tournaments.filter((t) => t.date === today);
   const totalToday = todayTourneys.length;
@@ -128,7 +130,7 @@ export default function HomePage() {
               value: totalFreerolls,
               color: "text-green-400",
             },
-            { label: "Plateformes", value: 2, color: "text-white" },
+            { label: "Plateformes", value: 3, color: "text-white" },
           ].map((s) => (
             <div
               key={s.label}
@@ -148,6 +150,46 @@ export default function HomePage() {
           dates={dates}
           today={today}
         />
+
+        {/* News preview */}
+        {latestNews.length > 0 && (
+          <section className="mt-10">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-base font-bold text-white">
+                📰 Actualités poker
+              </h2>
+              <a
+                href="/news/"
+                className="text-sm text-amber-400 hover:text-amber-300 transition-colors"
+              >
+                Toutes les news →
+              </a>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {latestNews.slice(0, 3).map((article) => (
+                <a
+                  key={article.slug}
+                  href={`/news/${article.slug}/`}
+                  className="rounded-xl border border-slate-800 bg-slate-900 p-4 hover:bg-slate-800/70 transition-colors block"
+                >
+                  <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 mb-1.5">
+                    {article.category} ·{" "}
+                    {new Date(article.date + "T12:00:00Z").toLocaleDateString(
+                      "fr-FR",
+                      { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }
+                    )}
+                  </div>
+                  <div className="font-semibold text-white text-sm leading-snug line-clamp-2">
+                    {article.title}
+                  </div>
+                  <p className="mt-1.5 text-xs text-slate-400 line-clamp-2">
+                    {article.summary}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Affiliate CTA */}
         <div className="mt-10 rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 sm:p-6 text-center">

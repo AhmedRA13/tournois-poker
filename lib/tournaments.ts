@@ -5,6 +5,7 @@
 
 import { getWinmaxData } from "./winamax";
 import { getPSData } from "./pokerstars";
+import { getUnibetTournaments } from "./unibet";
 
 export type TFormat = "freeroll" | "knockout" | "satellite" | "turbo" | "hyper" | "standard";
 export type TVariant = "nlhe" | "plo" | "other";
@@ -88,6 +89,10 @@ export function getUnifiedTournaments(): UnifiedTournament[] {
       });
     }
   }
+
+  // Unibet static schedule
+  const unibetTournaments = getUnibetTournaments(getParisTodayDate());
+  out.push(...unibetTournaments);
 
   // Sort by date then time
   out.sort((a, b) =>
