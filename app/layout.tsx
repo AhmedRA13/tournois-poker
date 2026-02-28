@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: {
@@ -31,9 +32,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Tournois Poker",
+    url: "https://tournois-poker.fr",
+    description:
+      "Programme complet des tournois de poker en ligne en France — Winamax, PokerStars, Unibet.",
+    logo: "https://tournois-poker.fr/logo.png",
+  };
+
   return (
     <html lang="fr">
       <body className="min-h-screen bg-slate-950 text-slate-100 antialiased">
+        <JsonLd data={orgSchema} />
         <header className="border-b border-slate-800 bg-slate-900 sticky top-0 z-50">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
             <a href="/" className="flex items-center gap-2 font-bold text-white shrink-0">
@@ -47,6 +59,8 @@ export default function RootLayout({
               <a href="/tournois/pokerstars/" className="hover:text-white transition-colors">PokerStars</a>
               <a href="/tournois/unibet/" className="hover:text-white transition-colors">Unibet</a>
               <a href="/tournois/freeroll/" className="hover:text-white transition-colors">Freerolls</a>
+              <a href="/tournois/dimanche/" className="hover:text-white transition-colors">Dimanche</a>
+              <a href="/tournois/bounty/" className="hover:text-white transition-colors">Bounty</a>
               <a href="/news/" className="hover:text-white transition-colors">News</a>
               <a href="/guide/" className="hover:text-white transition-colors">Guides</a>
               <a href="/guide/bonus-poker/" className="hover:text-white transition-colors">Bonus</a>
@@ -61,6 +75,7 @@ export default function RootLayout({
                 { href: "/tournois/pokerstars/", label: "★ PokerStars" },
                 { href: "/tournois/freeroll/", label: "🎁 Freerolls" },
                 { href: "/tournois/dimanche/", label: "🏆 Dimanche" },
+                { href: "/tournois/bounty/", label: "💥 Bounty" },
                 { href: "/news/", label: "📰 News" },
                 { href: "/guide/", label: "📚 Guides" },
                 { href: "/guide/bonus-poker/", label: "💰 Bonus" },
