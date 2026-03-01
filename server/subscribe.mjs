@@ -7,9 +7,14 @@
  * Emails stored in: /var/www/tournois-poker/emails.json (or DATA_FILE env var)
  *
  * Security: honeypot, rate limiting (3/IP/hour), disposable domain block, alias block
+ *
+ * Brevo integration (optional):
+ *   Set BREVO_API_KEY to enable. Falls back to JSON-only if key is absent.
+ *   Set BREVO_LIST_ID to target a specific list (default: 2).
  */
 
 import http from "node:http";
+import https from "node:https";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,6 +24,8 @@ import { fileURLToPath } from "node:url";
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 const DATA_FILE = process.env.DATA_FILE ?? "/var/www/tournois-poker/emails.json";
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN ?? "https://tournois-poker.fr";
+const BREVO_API_KEY = process.env.BREVO_API_KEY ?? "";
+const BREVO_LIST_ID = parseInt(process.env.BREVO_LIST_ID ?? "2", 10);
 
 // ── Rate limiting (in-memory, per IP) ────────────────────────────────────
 
@@ -132,6 +139,69 @@ function saveEmail(email, ip) {
   return { ok: true };
 }
 
+// ── Brevo API integration ─────────────────────────────────────────────────
+
+/**
+ * Add contact to Brevo list.
+ * No-op (logs) if BREVO_API_KEY is not set.
+ * Returns { ok: true } on success or if skipped, { ok: false, error } on failure.
+ */
+function addToBrevo(email) {
+  if (!BREVO_API_KEY) {
+    console.log(`[brevo] No API key — skipping Brevo sync for ${email}`);
+    return Promise.resolve({ ok: true, skipped: true });
+  }
+
+  return new Promise((resolve) => {
+    const payload = JSON.stringify({
+      email,
+      listIds: [BREVO_LIST_ID],
+      updateEnabled: true,
+    });
+
+    const options = {
+      hostname: "api.brevo.com",
+      path: "/v3/contacts",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(payload),
+        "api-key": BREVO_API_KEY,
+        Accept: "application/json",
+      },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => { data += chunk; });
+      res.on("end", () => {
+        // 201 = created, 204 = updated (updateEnabled:true)
+        if (res.statusCode === 201 || res.statusCode === 204) {
+          console.log(`[brevo] Contact added: ${email} (list ${BREVO_LIST_ID})`);
+          resolve({ ok: true });
+        } else {
+          console.error(`[brevo] Error ${res.statusCode}: ${data}`);
+          resolve({ ok: false, error: `status_${res.statusCode}` });
+        }
+      });
+    });
+
+    req.on("error", (err) => {
+      console.error(`[brevo] Request error: ${err.message}`);
+      resolve({ ok: false, error: err.message });
+    });
+
+    req.setTimeout(8000, () => {
+      console.error("[brevo] Request timeout");
+      req.destroy();
+      resolve({ ok: false, error: "timeout" });
+    });
+
+    req.write(payload);
+    req.end();
+  });
+}
+
 // ── Request handling ──────────────────────────────────────────────────────
 
 function getBody(req) {
@@ -233,7 +303,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    // Save
+    // Save locally
     const result = saveEmail(validation.email, ip);
     if (!result.ok) {
       if (result.reason === "already_subscribed") {
@@ -244,6 +314,11 @@ const server = http.createServer(async (req, res) => {
       json(res, 500, { ok: false, error: "storage_error" });
       return;
     }
+
+    // Sync to Brevo (non-blocking — respond to user immediately)
+    addToBrevo(validation.email).catch((err) => {
+      console.error("[brevo] Unexpected error:", err);
+    });
 
     json(res, 200, {
       ok: true,
