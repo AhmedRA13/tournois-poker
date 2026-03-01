@@ -381,6 +381,16 @@ export default function WinmaxPage() {
                   title: "Stratégie MTT",
                   desc: "Early, mid et late game des tournois online.",
                 },
+                {
+                  href: "/guide/strategie/",
+                  title: "Guides stratégie avancée",
+                  desc: "GTO, ICM, ranges, c-bet, 3-bet — 20 guides pour progresser.",
+                },
+                {
+                  href: "/tournois/buy-in/5-15-euros/",
+                  title: "Tournois 5€–15€",
+                  desc: "Les daily MTT les plus joués en France.",
+                },
               ].map((l) => (
                 <a
                   key={l.href}

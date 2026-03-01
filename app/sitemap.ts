@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getAllArticles } from "@/lib/news";
 import { getAllGuides, ALL_GUIDE_SLUGS } from "@/lib/guides";
 import { DEBUTANT_SLUGS } from "@/lib/debutant";
+import { STRATEGIE_SLUGS } from "@/lib/strategie";
 
 export const dynamic = "force-static";
 
@@ -112,5 +113,44 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.75,
   }));
 
-  return [...staticRoutes, ...newsRoutes, ...guideRoutes, ...debutantIndexRoute, ...debutantRoutes];
+  const strategieIndexRoute: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/guide/strategie/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+  ];
+
+  const strategieRoutes: MetadataRoute.Sitemap = [...STRATEGIE_SLUGS].map((slug) => ({
+    url: `${BASE_URL}/guide/strategie/${slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.75,
+  }));
+
+  const buyInRoutes: MetadataRoute.Sitemap = [
+    "freeroll",
+    "moins-de-5-euros",
+    "5-15-euros",
+    "15-50-euros",
+    "50-100-euros",
+    "plus-de-100-euros",
+  ].map((slug) => ({
+    url: `${BASE_URL}/tournois/buy-in/${slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
+  return [
+    ...staticRoutes,
+    ...newsRoutes,
+    ...guideRoutes,
+    ...debutantIndexRoute,
+    ...debutantRoutes,
+    ...strategieIndexRoute,
+    ...strategieRoutes,
+    ...buyInRoutes,
+  ];
 }

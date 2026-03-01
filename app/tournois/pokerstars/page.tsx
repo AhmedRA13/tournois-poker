@@ -379,6 +379,16 @@ export default function PokerStarsPage() {
                   title: "Stratégie MTT",
                   desc: "Guide complet pour les tournois multi-tables.",
                 },
+                {
+                  href: "/guide/strategie/",
+                  title: "Guides stratégie avancée",
+                  desc: "ICM, GTO, hand reading, PKO — 20 guides pour monter de niveau.",
+                },
+                {
+                  href: "/tournois/buy-in/plus-de-100-euros/",
+                  title: "Tournois 100€+",
+                  desc: "Sunday Million, SCOOP High et high-rollers.",
+                },
               ].map((l) => (
                 <a
                   key={l.href}

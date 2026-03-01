@@ -191,6 +191,34 @@ export default function HomePage() {
           </section>
         )}
 
+        {/* Buy-in quick links */}
+        <section className="mt-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold text-white">
+              💰 Trouver des tournois par buy-in
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {[
+              { href: "/tournois/buy-in/freeroll/", label: "Freerolls", sub: "0€ — Gratuit", color: "border-green-500/30 bg-green-500/5 hover:bg-green-500/10" },
+              { href: "/tournois/buy-in/moins-de-5-euros/", label: "Moins de 5€", sub: "Micro-stakes", color: "border-slate-700 bg-slate-800/50 hover:bg-slate-800" },
+              { href: "/tournois/buy-in/5-15-euros/", label: "5€ – 15€", sub: "Les plus joués", color: "border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10" },
+              { href: "/tournois/buy-in/15-50-euros/", label: "15€ – 50€", sub: "Intermédiaires", color: "border-slate-700 bg-slate-800/50 hover:bg-slate-800" },
+              { href: "/tournois/buy-in/50-100-euros/", label: "50€ – 100€", sub: "Mid-stakes", color: "border-slate-700 bg-slate-800/50 hover:bg-slate-800" },
+              { href: "/tournois/buy-in/plus-de-100-euros/", label: "100€+", sub: "High-stakes", color: "border-red-500/30 bg-red-500/5 hover:bg-red-500/10" },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`rounded-xl border p-3 text-center transition-colors block ${item.color}`}
+              >
+                <div className="font-bold text-white text-sm">{item.label}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{item.sub}</div>
+              </a>
+            ))}
+          </div>
+        </section>
+
         {/* Affiliate CTA */}
         <div className="mt-10 rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 sm:p-6 text-center">
           <h2 className="text-base sm:text-lg font-bold text-amber-400">
