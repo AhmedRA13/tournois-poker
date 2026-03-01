@@ -454,6 +454,14 @@ export default function WinmaxPage() {
             </a>
           </div>
         </div>
+        <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
+          <a href="/comparer-rooms/" className="text-amber-400 hover:text-amber-300 transition-colors">
+            🏆 Comparateur Winamax vs PokerStars vs Unibet →
+          </a>
+          <a href="/comparer/winamax-vs-pokerstars/" className="text-slate-400 hover:text-slate-300 transition-colors">
+            ⚔️ Winamax vs PokerStars
+          </a>
+        </div>
       </div>
     </>
   );

@@ -219,6 +219,45 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Comparateur rooms */}
+        <section className="mt-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-base font-bold text-white">
+              🏆 Choisir sa salle de poker
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <a
+              href="/comparer-rooms/"
+              className="rounded-xl border border-amber-500/30 bg-amber-500/5 hover:bg-amber-500/10 p-3 text-center transition-colors block"
+            >
+              <div className="font-bold text-white text-sm">Comparateur rooms</div>
+              <div className="text-xs text-slate-400 mt-0.5">Winamax vs PS vs Unibet</div>
+            </a>
+            <a
+              href="/guide/bonus-poker/"
+              className="rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 p-3 text-center transition-colors block"
+            >
+              <div className="font-bold text-white text-sm">Bonus de bienvenue</div>
+              <div className="text-xs text-slate-400 mt-0.5">Jusqu&apos;à 1 300€ cumulables</div>
+            </a>
+            <a
+              href="/comparer/winamax-vs-pokerstars/"
+              className="rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 p-3 text-center transition-colors block"
+            >
+              <div className="font-bold text-white text-sm">Winamax vs PokerStars</div>
+              <div className="text-xs text-slate-400 mt-0.5">Comparatif détaillé</div>
+            </a>
+            <a
+              href="/tournois/winamax/"
+              className="rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 p-3 text-center transition-colors block"
+            >
+              <div className="font-bold text-white text-sm">Tournois Winamax</div>
+              <div className="text-xs text-slate-400 mt-0.5">Programme complet</div>
+            </a>
+          </div>
+        </section>
+
         {/* Affiliate CTA */}
         <div className="mt-10 rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 sm:p-6 text-center">
           <h2 className="text-base sm:text-lg font-bold text-amber-400">

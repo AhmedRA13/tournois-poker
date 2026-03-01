@@ -143,6 +143,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const comparateurRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${BASE_URL}/comparer-rooms/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.85,
+    },
+    ...["winamax-vs-pokerstars", "winamax-vs-unibet", "pokerstars-vs-unibet"].map(
+      (slug) => ({
+        url: `${BASE_URL}/comparer/${slug}/`,
+        lastModified: new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.75,
+      })
+    ),
+  ];
+
   return [
     ...staticRoutes,
     ...newsRoutes,
@@ -152,5 +169,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...strategieIndexRoute,
     ...strategieRoutes,
     ...buyInRoutes,
+    ...comparateurRoutes,
   ];
 }
